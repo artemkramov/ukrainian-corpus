@@ -39,9 +39,10 @@ def get_phrases():
 def get_coherence():
     text = get_text_from_request()
     summary = {
-        "series": model_coherence.get_prediction_series(text),
-        "coherence_product": model_coherence.evaluate_coherence_as_product(text),
-        "coherence_threshold": model_coherence.evaluate_coherence_using_threshold(text, 0.1)
+        "series": [str(item) for item in list(model_coherence.get_prediction_series(text).numpy().flatten())],
+        "coherence_product": str(model_coherence.evaluate_coherence_as_product(text)),
+        "coherence_threshold": str(model_coherence.evaluate_coherence_using_threshold(text, 0.1))
     }
+    print(summary)
     return jsonify(summary)
     
