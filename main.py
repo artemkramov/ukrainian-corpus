@@ -13,6 +13,9 @@ model_phrase = noun_phrase_ua.NLP()
 
 print('Ready to accept queries')
 
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+
 def get_text_from_request():
     content = request.json
     if (not (content is None)) and 'text' in content:
