@@ -8,7 +8,7 @@ RUN pip install --user -r requirements1.txt
 
 FROM python:3.6-slim AS build-image
 
-RUN pip install flask gunicorn
+RUN pip install flask gunicorn flask-cors
 
 COPY --from=compile-image /root/.local /usr/local
 

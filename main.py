@@ -1,13 +1,16 @@
 from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
 from coreference_ua import CoreferenceUA
-from coherence_ua.transformer_coherence import CoherenceModel
+from coherence_ua import CoherenceModel
 import noun_phrase_ua
 app = Flask(__name__)
+CORS(app)
 
-print('Init coherence model...')
-model_coherence = CoherenceModel()
 print('Init coreference model...')
 model_coreference = CoreferenceUA()
+print('Init coherence model...')
+model_coherence = CoherenceModel()
+model_coherence.set_embedder(model_coreference.policy.semantic_embedding.model)
 print('Init phrase extractor...')
 model_phrase = noun_phrase_ua.NLP()
 
@@ -42,9 +45,9 @@ def get_phrases():
 def get_coherence():
     text = get_text_from_request()
     summary = {
-        "series": [str(item) for item in list(model_coherence.get_prediction_series(text).numpy().flatten())],
+        "series": [str(item) for item in list(model_coherence.get_prediction_series(text).flatten())],
         "coherence_product": str(model_coherence.evaluate_coherence_as_product(text)),
-        "coherence_threshold": str(model_coherence.evaluate_coherence_using_threshold(text, 0.1))
+        "coherence_threshold": str(model_coherence.evaluate_coherence_using_threshold(text, 0.5))
     }
     print(summary)
     return jsonify(summary)
