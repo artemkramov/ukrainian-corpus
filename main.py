@@ -44,11 +44,14 @@ def get_phrases():
 @app.route('/api/get_coherence', methods=['POST'])
 def get_coherence():
     text = get_text_from_request()
+    sentences = model_coherence.ud_model.get_tokens(text)
+    sentences = [" ".join(sentence) for sentence in sentences]
     summary = {
         "series": [str(item) for item in list(model_coherence.get_prediction_series(text).flatten())],
         "coherence_product": str(model_coherence.evaluate_coherence_as_product(text)),
-        "coherence_threshold": str(model_coherence.evaluate_coherence_using_threshold(text, 0.5))
+        "coherence_threshold": str(model_coherence.evaluate_coherence_using_threshold(text, 0.5)),
+        "sentences": sentences
     }
-    print(summary)
+    # print(summary)
     return jsonify(summary)
     

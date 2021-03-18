@@ -80,7 +80,7 @@ class CoherenceModel:
   def evaluate_coherence_as_product(self, text):
     
     predictions = self.get_prediction_series(text)
-    return np.multiply.reduce(predictions)
+    return np.multiply.reduce(predictions)[0]
     #return np.mean(predictions)
 
   def evaluate_coherence_using_threshold(self, text, threshold=0.5):
